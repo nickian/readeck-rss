@@ -92,25 +92,26 @@ class ReadeckRSS {
         $articles
     ) {
         $feed = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-        $feed .= "<rss xmlns:atom=\"http://www.w3.org/2005/Atom\">\n";
+        $feed .= "<rss version=\"2.0\" xmlns:atom=\"http://www.w3.org/2005/Atom\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\">\n";
         $feed .= "\t<channel>\n";
         $feed .= "\t\t<title>".$title."</title>\n"; 
         $feed .= "\t\t<link>".$url."</link>\n";
         $feed .= "\t\t<description>".$description."</description>\n";
+        $feed .= "\t\t<atom:link href=\"".$url."\" rel=\"self\" type=\"application/rss+xml\" />\n";
 
         foreach ( $articles as $article ) {
 
-            if ( isset($article['title']) ) {
+            if ( isset($article['title']) && $article['title'] ) {
 
                 $feed .= "\t\t<item>\n";
                 $feed .= "\t\t\t<title>" . $article['title'] . "</title>\n"; 
                 $feed .= "\t\t\t<link>" . $this->api_url.'/bookmarks'.$article['id'] . "</link>\n"; 
                 $feed .= "\t\t\t<author>".implode(', ', $article['authors'])."</author>\n";
                 $feed .= "\t\t\t<source>" . $article['url'] . "</source>\n"; 
-                if ( isset($article['resources']['thumbnail']['src']) ) {
+                if ( isset($article['resources']['thumbnail']['src']) && $article['resources']['thumbnail']['src'] ) {
                     $feed .= "\t\t\t<enclosure url=\"".$article['resources']['image']['src']."\" type=\"image/jpeg\"/>\n"; 
                 }
-                $feed .= "\t\t\t<description>" . $article['description'] . "<description>\n"; 
+                $feed .= "\t\t\t<description>" . $article['description'] . "</description>\n"; 
                 $feed .= "\t\t\t<pubDate>".date('r', strtotime($article['created']))."</pubDate>\n"; 
                 $feed .= "\t\t</item>\n"; 
 
